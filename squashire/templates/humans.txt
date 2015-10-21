@@ -3,11 +3,11 @@
 
 # TEAM
 
-    <name> -- <role> -- <twitter>
+    Diego-MX -- Squashonaut -- <twitter>
 
 # THANKS
 
-    <name>
+    Squashoneers
 
 # TECHNOLOGY COLOPHON
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """squashire URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -13,11 +14,20 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
+
 from django.conf.urls import include, url
 from django.contrib import admin
-from squashire.views import home
+from django.conf.urls.i18n import i18n_patterns
+from squashire.views import home, home_files
+
 
 urlpatterns = [
+    url(r'^(?P<filename>(robots.txt)|(humans.txt))$',
+    home_files, name='home-files'),
+]
+
+urlpatterns += i18n_patterns(
     url(r'^$', home, name='home'),
     url(r'^admin/', include(admin.site.urls)),
-]
+)
+
