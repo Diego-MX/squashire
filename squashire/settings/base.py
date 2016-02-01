@@ -96,12 +96,14 @@ TEMPLATES = [
               # allauth specific context processors
               # Eventually commented because of ALLAUTH version.
               # http://stackoverflow.com/questions/31648019/no-module-named-allauth-account-context-processors
-              # "allauth.account.context_processors.account",
-              # "allauth.socialaccount.context_processors.socialaccount",
+            #   "allauth.account.context_processors.account",
+            #   "allauth.socialaccount.context_processors.socialaccount",
             ],
         },
     },
 ]
+
+
 
 WSGI_APPLICATION = 'squashire.wsgi.application'
 

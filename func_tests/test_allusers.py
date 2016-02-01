@@ -53,7 +53,7 @@ class HomeNewVisitorTest(StaticLiveServerTestCase):
 
     def test_internationalization(self):
         for (lang, h1_text) in [('en', 'Welcome to the Squashire!'),
-                              ('es-mx', '¡Bienvenido a Squashire!')]:
+                                ('es-mx', '¡Bienvenido a Squashire!')]:
             activate(lang)
             self.browser.get(self.get_full_url("home"))
             h1 = self.browser.find_element_by_tag_name("h1")

@@ -9,6 +9,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.utils.translation import activate
 
+import pdb
 
 class TestGoogleLogin(StaticLiveServerTestCase):
 
@@ -23,25 +24,27 @@ class TestGoogleLogin(StaticLiveServerTestCase):
         self.browser.quit()
 
     def get_element_by_id(self, element_id):
-        return self.browser.wait.until(EC.presence_of_element_located(
-            (By.ID, element_id)))
+        return WebDriverWait(self.browser, 10).until(
+            EC.presence_of_element_located((By.ID, element_id)) )
 
     def get_button_by_id(self, element_id):
-        return self.browser.wait.until(EC.element_to_be_clickable(
-            (By.ID, element_id)))
+        return WebDriverWait(self.browser, 10).until(
+            EC.element_to_be_clickable((By.ID, element_id)) )
 
     def get_full_url(self, namespace):
         return self.live_server_url + reverse(namespace)
 
     def user_login(self):
         import json
-        with open("squashire/fixtures/google_user.json") as f:
-            credentials = json.loads(f.read())
+        with open("squashire/fixtures/google_user.json") as fixtures:
+            credentials = json.loads(fixtures.read())
+
         self.get_element_by_id("Email").send_keys(credentials["Email"])
-        self.button_by_id("next").click()
-        self.get_element_by_id("Passwd").send_keys(crdentials["Passwd"])
-        for btn in ["signIn", "submit_approve_access"]:
-            self.get_button_by_id(btn).click()
+        self.get_button_by_id("next").click()
+        self.get_element_by_id("Passwd").send_keys(credentials["Passwd"])
+        self.get_button_by_id('signIn').click()
+        # pdb.set_trace()
+        self.get_button_by_id('submit_approve_access').click()
         return
 
     def test_google_login(self):
@@ -52,7 +55,9 @@ class TestGoogleLogin(StaticLiveServerTestCase):
             self.get_element_by_id("logout")
         self.assertEqual(google_login.get_attribute("href"),
             self.live_server_url + "/accounts/google/login")
+
         google_login.click()
+        self.user_login()
         with self.assertRaises(TimeoutException):
             self.get_element_by_id("google_login")
         google_logout = self.get_element_by_id("logout")

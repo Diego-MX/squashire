@@ -1,3 +1,7 @@
 -r base.txt
 coverage==4.0.1
-selenium==2.48.0
+selenium==2.50.0
+argparse==1.4.0
+pdb==0.1
+python-gnupg==0.3.8
+pyyaml==3.11
