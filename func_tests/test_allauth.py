@@ -24,11 +24,11 @@ class TestGoogleLogin(StaticLiveServerTestCase):
         self.browser.quit()
 
     def get_element_by_id(self, element_id):
-        return WebDriverWait(self.browser, 10).until(
+        return WebDriverWait(self.browser, 5).until(
             EC.presence_of_element_located((By.ID, element_id)) )
 
     def get_button_by_id(self, element_id):
-        return WebDriverWait(self.browser, 10).until(
+        return WebDriverWait(self.browser, 5).until(
             EC.element_to_be_clickable((By.ID, element_id)) )
 
     def get_full_url(self, namespace):
@@ -42,9 +42,8 @@ class TestGoogleLogin(StaticLiveServerTestCase):
         self.get_element_by_id("Email").send_keys(credentials["Email"])
         self.get_button_by_id("next").click()
         self.get_element_by_id("Passwd").send_keys(credentials["Passwd"])
-        self.get_button_by_id('signIn').click()
-        # pdb.set_trace()
-        self.get_button_by_id('submit_approve_access').click()
+        self.get_button_by_id("signIn").click()
+        self.get_button_by_id("submit_approve_access").click()
         return
 
     def test_google_login(self):

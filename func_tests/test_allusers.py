@@ -6,8 +6,26 @@ from django.utils.translation import activate
 from datetime import date
 from django.utils import formats
 
+import sys
+
 
 class HomeNewVisitorTest(StaticLiveServerTestCase):
+
+    ############ FROM SUPERLISTS
+    @classmethod
+    def setUpClass(cls):
+        for arg in sys.argv:
+            if 'liveserver' in arg:
+                cls.server_url = 'http://' + arg.split('=')[1]
+                return
+        super().setUpClass()
+        cls.server_url = cls.live_server_url
+
+    @classmethod
+    def tearDownClass(cls):
+        if cls.server_url == cls.live_server_url:
+            super().tearDownClass()
+    ############
 
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -20,46 +38,51 @@ class HomeNewVisitorTest(StaticLiveServerTestCase):
     def get_full_url(self, namespace):
         return self.live_server_url + reverse(namespace)
 
+    ############ TESTS ##########
+
     def test_home_title(self):
         self.browser.get(self.get_full_url("home"))
-        self.assertIn("Squashire", self.browser.title)
+        self.assertIn("Squashitlan", self.browser.title)
 
-    def test_h1_css(self):
-        self.browser.get(self.get_full_url("home"))
         h1 = self.browser.find_element_by_tag_name("h1")
         self.assertEqual(h1.value_of_css_property("color"),
                          "rgba(200, 50, 255, 1)")
 
-    def test_localization(self):
-        today = date.today()
-        for lang in ['en', 'es-mx']:
-            activate(lang)
-            self.browser.get(self.get_full_url("home"))
-            try:
-                local_date = self.browser.find_element_by_id("local-date")
-            except NoSuchElementException:
-                self.fail("Could not find 'local-date' element on page")
-
-            non_local_date = self.browser.find_element_by_id("non-local-date")
-            self.assertEqual(formats.date_format(today, use_l10n=True),
-                                  local_date.text)
-            self.assertEqual(today.strftime('%Y-%m-%d'), non_local_date.text)
-
     def test_home_files(self):
+        # What are these Home Files?
+        # I still don't get their purpose.
+        # Yeah yeah, I know... Robots and somethings.
         self.browser.get(self.live_server_url + "/robots.txt")
         self.assertNotIn("Not Found", self.browser.title)
         self.browser.get(self.live_server_url + "/humans.txt")
         self.assertNotIn("Not Found", self.browser.title)
 
-    def test_internationalization(self):
-        for (lang, h1_text) in [('en', 'Welcome to the Squashire!'),
-                                ('es-mx', '¡Bienvenido a Squashire!')]:
+    def test_local_international_timezone(self):
+        today = date.today()
+        welcome = {'en'   : 'Welcome to Squashitlan!',
+                   'es-mx': 'Bienvenido a Squashitlán.'
+        }
+
+        for lang in ['en', 'es-mx']:
             activate(lang)
             self.browser.get(self.get_full_url("home"))
-            h1 = self.browser.find_element_by_tag_name("h1")
-            self.assertEqual(h1.text, h1_text)
 
-    def test_time_zone(self):
+            # Localization
+            try:
+                local_date = self.browser.find_element_by_id("local-date")
+            except NoSuchElementException:
+                self.fail("Could not find 'local-date' element on page")
+            self.assertEqual(formats.date_format(today, use_l10n=True),
+                local_date.text)
+
+            non_local_date = self.browser.find_element_by_id("non-local-date")
+            self.assertEqual(today.strftime('%Y-%m-%d'), non_local_date.text)
+
+            # Internationalization
+            h1 = self.browser.find_element_by_tag_name("h1")
+            self.assertEqual(h1.text, welcome[lang])
+
+        # Time Zones
         self.browser.get(self.get_full_url("home"))
         tz = self.browser.find_element_by_id("time-tz").text
         utc = self.browser.find_element_by_id("time-utc").text

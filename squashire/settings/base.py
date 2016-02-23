@@ -125,7 +125,7 @@ WSGI_APPLICATION = 'squashire.wsgi.application'
 LANGUAGE_CODE = 'en_us'
 
 LANGUAGES = (
-    ('en', _('English')),
+    ('en',    _('English')),
     ('es-mx', _('Spanish (Mexico)')),
 )
 

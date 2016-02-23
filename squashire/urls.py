@@ -18,13 +18,13 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf.urls.i18n import i18n_patterns
-from squashire.views import home, home_files
-
+from squashire.views import home, home_files, logout
 
 
 urlpatterns = [
     url(r'^accounts/logout/$',
         'django.contrib.auth.views.logout', {'next_page': '/'}),
+    # url(r'^accounts/logout/$', logout),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^(?P<filename>(robots.txt)|(humans.txt))$',
         home_files, name='home-files'),
