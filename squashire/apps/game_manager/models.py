@@ -2,6 +2,9 @@ from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+
 from . import managers
 
 # FOLLOW THIS ORDER FOR EACH MODEL'S ATTRIBUTES AND METHODS.
@@ -14,6 +17,15 @@ from . import managers
     # Methods
     # Meta and String# Create your models here.
 
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_profile_for_new_user(sender, created, instance, **kwargs):
+    if created:
+        profile = Profile(user=instance)
+        profile.save()
+
+
 class Profile(models.Model):
     ## Relations
     user = models.OneToOneField(
@@ -24,7 +36,7 @@ class Profile(models.Model):
     ## Attributes - Mandatory
     interaction = models.PositiveIntegerField(
         default=0,
-        verbose_name=_("interaction")
+        verbose_name=_("interaction"),
         )
     ## Attributes - Optional
     # Object Manager

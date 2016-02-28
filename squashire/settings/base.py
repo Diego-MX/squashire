@@ -54,6 +54,8 @@ INSTALLED_APPS += (
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    # Squash Apps
+    'squashire.apps.game_manager',
     # Login via Google
     'allauth.socialaccount.providers.google',
 )
@@ -134,11 +136,8 @@ LOCALE_PATHS = (
 )
 
 TIME_ZONE = 'America/Mexico_City'
-
 USE_I18N  = True
-
 USE_L10N  = True
-
 USE_TZ    = True
 
 
@@ -148,8 +147,11 @@ USE_TZ    = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static"),
+    # Location of your application should not be public web accessible.
+    os.path.join(BASE_DIR, "../../static"),
 )
+
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
 # These variables are needed to run ALLAUTH with Google.

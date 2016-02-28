@@ -12,13 +12,11 @@ def get_env_variable(var_name):
 
 DEBUG = True
 
-DB_PASSWORD = get_env_variable("DB_PASSWORD")
-
 DATABASES = {
     'default': {
         'ENGINE'  : 'django.db.backends.mysql',
-        'NAME'    : 'squashire_db',
-        'USER'    : 'diego',
-        'PASSWORD': DB_PASSWORD,
+        'NAME'    : get_env_variable("DB_NAME"),    #'squashire_db',
+        'USER'    : get_env_variable("DB_USER"),    #'diego',
+        'PASSWORD': get_env_variable("DB_PASSWORD"),
     }
 }

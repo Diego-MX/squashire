@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from selenium import webdriver
 from django.core.urlresolvers import reverse
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.utils.translation import activate
-from datetime import date
 from django.utils import formats
+from selenium import webdriver
 
-import sys
+from datetime import date
+import unittest, sys
 
 
 class HomeNewVisitorTest(StaticLiveServerTestCase):
@@ -36,32 +36,32 @@ class HomeNewVisitorTest(StaticLiveServerTestCase):
         self.browser.quit()
 
     def get_full_url(self, namespace):
-        return self.live_server_url + reverse(namespace)
+        return self.server_url + reverse(namespace)
+
 
     ############ TESTS ##########
 
-    def test_home_title(self):
+    def test_home(self):
         self.browser.get(self.get_full_url("home"))
         self.assertIn("Squashitlan", self.browser.title)
 
         h1 = self.browser.find_element_by_tag_name("h1")
         self.assertEqual(h1.value_of_css_property("color"),
-                         "rgba(200, 50, 255, 1)")
+            "rgba(200, 50, 255, 1)")
 
     def test_home_files(self):
         # What are these Home Files?
         # I still don't get their purpose.
         # Yeah yeah, I know... Robots and somethings.
-        self.browser.get(self.live_server_url + "/robots.txt")
+        self.browser.get(self.server_url + "/robots.txt")
         self.assertNotIn("Not Found", self.browser.title)
-        self.browser.get(self.live_server_url + "/humans.txt")
+        self.browser.get(self.server_url + "/humans.txt")
         self.assertNotIn("Not Found", self.browser.title)
 
-    def test_local_international_timezone(self):
+    def test_localizations(self):
         today = date.today()
         welcome = {'en'   : 'Welcome to Squashitlan!',
-                   'es-mx': 'Bienvenido a Squashitlán.'
-        }
+                   'es-mx': 'Bienvenido a Squashitlán.'}
 
         for lang in ['en', 'es-mx']:
             activate(lang)
@@ -89,3 +89,10 @@ class HomeNewVisitorTest(StaticLiveServerTestCase):
         ny = self.browser.find_element_by_id("time-ny").text
         self.assertNotEqual(tz, utc)
         self.assertNotIn(ny, [tz, utc])
+
+#    def test_annotate_a_game():
+#        pass
+
+
+if __name__ == '__main__':
+    unittest.main(warnings='ignore')
