@@ -3,6 +3,8 @@ from .base import *
 
 DEBUG = False
 
+ALLOWED_HOSTS = ['www.squashitlan.com']
+
 #DATABASES = {
     #'default': {
         #'ENGINE': 'django.db.backends.sqlite3',

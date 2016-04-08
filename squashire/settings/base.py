@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from os.path import dirname, abspath
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
 
@@ -24,7 +25,7 @@ def get_env_variable(var_name):
         raise ImproperlyConfigured(error_msg)
 
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = dirname(dirname(dirname(abspath(__file__))))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -35,7 +36,7 @@ SECRET_KEY = get_env_variable('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -80,7 +81,7 @@ ROOT_URLCONF = 'squashire.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "templates")],
+        'DIRS': [os.path.join(BASE_DIR, "squashire/templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -106,9 +107,7 @@ TEMPLATES = [
 ]
 
 
-
 WSGI_APPLICATION = 'squashire.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
@@ -132,7 +131,7 @@ LANGUAGES = (
 )
 
 LOCALE_PATHS = (
-    os.path.join(BASE_DIR, 'locale'),
+    os.path.join(BASE_DIR, '/squashire/locale'),
 )
 
 TIME_ZONE = 'America/Mexico_City'
@@ -146,12 +145,12 @@ USE_TZ    = True
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (
+#STATICFILES_DIRS = (
     # Location of your application should not be public web accessible.
-    os.path.join(BASE_DIR, "../../static"),
-)
+    # os.path.join(BASE_DIR, "../../static"),
+# )
 
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, '../static')
 
 
 # These variables are needed to run ALLAUTH with Google.

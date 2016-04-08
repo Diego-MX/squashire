@@ -7,6 +7,7 @@ from django.db.models.signals import post_save
 
 from . import managers
 
+ 
 # FOLLOW THIS ORDER FOR EACH MODEL'S ATTRIBUTES AND METHODS.
 # class MyModel(models.Model):
     # Relations
